@@ -34,8 +34,7 @@ export default new Router({
       path: '/courses/:id',
       name: 'Course',
       props: true,
-      component: Course,
-      beforeEnter: AuthGuard
+      component: Course
     },
     {
       path: '/courses/:id/edit',
