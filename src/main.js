@@ -2,12 +2,15 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import App from './App'
 import * as firebase from 'firebase'
+import VueMoment from 'vue-moment'
 import router from './router'
 import { store } from './store'
 import DateFilter from './filters/date'
 import AlertCmp from './components/Shared/Alert.vue'
 
 Vue.use(Vuetify)
+Vue.use(VueMoment)
+
 Vue.config.productionTip = false
 
 Vue.filter('date', DateFilter)
