@@ -18,6 +18,28 @@ export const store = new Vuex.Store({
     createCourse (state, payload) {
       state.loadedCourses.push(payload)
     },
+    updateCourse (state, payload) {
+      const course = state.loadedCourses.find(course => {
+        return course.id === payload.id
+      })
+      if (payload.title) {
+        course.title = payload.title
+      }
+      if (payload.description) {
+        course.description = payload.description
+      }
+      if (payload.date) {
+        course.date = payload.date
+      }
+    },
+    deleteCourse (state, payload) {
+      const courses = state.loadedCourses
+      const idx = state.loadedCourses.findIndex(course => {
+        return course.id === payload
+      })
+      courses.splice(idx, 1)
+      state.loadedCourses = [...courses]
+    },
     setUser (state, payload) {
       state.user = payload
     },
@@ -52,12 +74,10 @@ export const store = new Vuex.Store({
             })
           }
           commit('setLoadedCourses', courses)
-          console.log('here1')
           commit('setLoading', false)
         })
         .catch(error => {
           console.log('loadCourses', error)
-          console.log('here2')
           commit('setLoading', false)
         })
     },
@@ -87,6 +107,51 @@ export const store = new Vuex.Store({
           console.log(error)
         })
       // Reach out to firebase and store it
+    },
+    updateCourseData ({ commit }, payload) {
+      commit('setLoading', true)
+      const updateObj = {}
+      if (payload.title) {
+        updateObj.title = payload.title
+      }
+      if (payload.description) {
+        updateObj.description = payload.description
+      }
+      if (payload.imageUrl) {
+        updateObj.imageUrl = payload.imageUrl
+      }
+      if (payload.date) {
+        updateObj.date = payload.date
+      }
+      firebase
+        .database()
+        .ref('courses')
+        .child(payload.id)
+        .update(updateObj)
+        .then(() => {
+          commit('setLoading', false)
+          commit('updateCourse', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
+    deleteCourseData ({ commit }, payload) {
+      commit('setLoading', true)
+      firebase
+        .database()
+        .ref('courses')
+        .child(payload)
+        .remove()
+        .then(() => {
+          commit('setLoading', false)
+          commit('deleteCourse', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
     },
     signUserUp ({ commit }, payload) {
       commit('setLoading', true)

@@ -2,19 +2,19 @@
   <v-container>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
-        <h4>Create a new Course</h4>
+        <h4>Edit {{ course.title }} Course</h4>
       </v-flex>
     </v-layout>
     <v-layout row>
       <v-flex xs12>
-        <form @submit.prevent="onCreateCourse">
+        <form @submit.prevent="onEditCourse">
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
                 name="title"
                 label="Title"
                 id="title"
-                v-model="title"
+                v-model="course.title"
                 required></v-text-field>
             </v-flex>
           </v-layout>
@@ -24,13 +24,13 @@
                 name="imageUrl"
                 label="Image URL"
                 id="image-url"
-                v-model="imageUrl"
+                v-model="course.imageUrl"
                 required></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <img :src="imageUrl" height="150">
+              <img :src="course.imageUrl" height="150">
             </v-flex>
           </v-layout>
           <v-layout row>
@@ -40,7 +40,7 @@
                 label="Description"
                 id="description"
                 multi-line
-                v-model="description"
+                v-model="course.description"
                 required></v-text-field>
             </v-flex>
           </v-layout>
@@ -83,7 +83,7 @@
               <v-btn
                 class="primary"
                 :disabled="!formIsValid"
-                type="submit">Create Course</v-btn>
+                type="submit">Save Course</v-btn>
             </v-flex>
           </v-layout>
         </form>
@@ -94,20 +94,29 @@
 
 <script>
 export default {
+  props: ['id'],
+
   data () {
     return {
-      title: '',
-      imageUrl: '',
-      description: '',
-      date: {
-        start: new Date(),
-        end: new Date()
-      },
-      time: {
-        start: new Date(),
-        end: new Date()
-      }
+      date: { start: '', end: '' },
+      time: { start: '', end: '' },
+
+      course: {}
     }
+  },
+
+  beforeMount () {
+    Object.assign(this.course, this.$store.getters.loadedCourse(this.id))
+
+    Object.assign(this.date, {
+      start: new Date(this.course.date.start),
+      end: new Date(this.course.date.end)
+    })
+
+    Object.assign(this.time, {
+      start: new Date(this.course.date.start),
+      end: new Date(this.course.date.end)
+    })
   },
   computed: {
     formIsValid () {
@@ -133,24 +142,21 @@ export default {
       })
 
       return obj
+    },
+    loading () {
+      return this.$store.getters.loading
     }
   },
   methods: {
-    onCreateCourse () {
+    onEditCourse () {
       if (!this.formIsValid) {
         return
       }
-      const courseData = {
-        title: this.title,
-        location: this.location,
-        imageUrl: this.imageUrl,
-        description: this.description,
-        date: this.submittableDateTime
-        // TODO: add files to firebase
-      }
+      const courseData = this.course
+      Object.assign(courseData, { date: this.submittableDateTime })
 
-      this.$store.dispatch('createCourse', courseData)
-      this.$router.push('/courses')
+      this.$store.dispatch('updateCourseData', courseData)
+      this.$router.push('/courses/' + courseData.id)
     }
   }
 }

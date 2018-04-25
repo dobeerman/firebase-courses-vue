@@ -39,7 +39,6 @@
 export default {
   computed: {
     courses () {
-      console.log(this.$store.getters.loadedCourses)
       return this.$store.getters.loadedCourses
     }
   }

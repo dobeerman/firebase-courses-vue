@@ -15,8 +15,23 @@
             <div>{{ course.description }}</div>
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
             <v-btn class="primary">Register</v-btn>
+            <v-spacer></v-spacer>
+            <!-- Add roles to show this button -->
+            <v-btn
+              class="success"
+              :to="{ name: 'EditCourse', params: { id: this.id } }"
+            >
+              Edit
+            </v-btn>
+            <v-btn
+              class="warninig"
+              flat
+              @click="onDeleteCourse"
+            >
+              Delete
+            </v-btn>
+
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -30,6 +45,12 @@ export default {
   computed: {
     course () {
       return this.$store.getters.loadedCourse(this.id)
+    }
+  },
+  methods: {
+    onDeleteCourse () {
+      this.$store.dispatch('deleteCourseData', this.id)
+      this.$router.push('/courses')
     }
   }
 }

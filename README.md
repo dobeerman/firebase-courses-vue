@@ -2,9 +2,9 @@
 
 ## Teacher:
 
-* [x] – Create course
-* [ ] – Update course
-* [ ] – Delete Course
+* [x] * Create course
+* [x] * Update course
+* [x] * Delete Course
 
 ## Course content
 

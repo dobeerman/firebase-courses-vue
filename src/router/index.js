@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Courses from '@/components/Course/Courses'
 import CreateCourse from '@/components/Course/CreateCourse'
+import EditCourse from '@/components/Course/EditCourse'
 import Profile from '@/components/User/Profile'
 import Signup from '@/components/User/Signup'
 import Signin from '@/components/User/Signin'
@@ -33,7 +34,15 @@ export default new Router({
       path: '/courses/:id',
       name: 'Course',
       props: true,
-      component: Course
+      component: Course,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/courses/:id/edit',
+      name: 'EditCourse',
+      props: true,
+      component: EditCourse,
+      beforeEnter: AuthGuard
     },
     {
       path: '/profile',
