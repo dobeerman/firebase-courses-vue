@@ -220,6 +220,9 @@ export const store = new Vuex.Store({
         })
       }
     },
+    userCourses (state) {
+      return state.loadedCourses.filter(course => course.creatorId === state.user.id)
+    },
     user (state) {
       return state.user
     },

@@ -5,6 +5,7 @@
 * [x] * Create course
 * [x] * Update course
 * [x] * Delete Course
+* [x] * Simple check of overlapping
 
 ## Course content
 

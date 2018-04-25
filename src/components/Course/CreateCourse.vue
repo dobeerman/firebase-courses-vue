@@ -78,6 +78,13 @@
               </v-layout>
             </v-flex>
           </v-layout>
+          <v-layout row v-if="overlap()">
+            <v-flex xs12 sm6 offset-sm3>
+              <v-alert class="warning" :value="true">
+                Course is overlapped
+              </v-alert>
+            </v-flex>
+          </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-btn
@@ -111,7 +118,9 @@ export default {
   },
   computed: {
     formIsValid () {
-      return this.title !== '' && this.imageUrl !== '' && this.description !== ''
+      return (
+        this.title !== '' && this.imageUrl !== '' && this.description !== '' && this.overlap() < 1
+      )
     },
     submittableDateTime () {
       let obj = {}
@@ -133,6 +142,12 @@ export default {
       })
 
       return obj
+    },
+    userCourses () {
+      return this.$store.getters.userCourses
+    },
+    overlap () {
+      return this.isOverlapped
     }
   },
   methods: {
@@ -151,6 +166,27 @@ export default {
 
       this.$store.dispatch('createCourse', courseData)
       this.$router.push('/courses')
+    },
+
+    isOverlapped () {
+      const date = this.submittableDateTime
+      const start = this.$moment(date.start)
+      const end = this.$moment(date.end)
+
+      const isOverlapped = this.userCourses
+        .reduce((pv, cv) => {
+          const cvStart = this.$moment(cv.date.start)
+          const cvEnd = this.$moment(cv.date.end)
+
+          const ok = start.isBetween(cvStart, cvEnd) || end.isBetween(cvStart, cvEnd)
+
+          pv.push(ok)
+
+          return pv
+        }, [])
+        .filter(el => el)
+
+      return isOverlapped.length
     }
   }
 }
