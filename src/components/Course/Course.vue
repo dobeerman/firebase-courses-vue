@@ -1,6 +1,16 @@
 <template>
   <v-container>
-    <v-layout row wrap>
+    <v-layout v-if="!course">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          class="primary--text"
+          :width="7"
+          :size="70"
+        ></v-progress-circular>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap v-else>
       <v-flex xs8 offset-xs2>
         <v-card>
           <v-card-title>
@@ -18,19 +28,21 @@
             <v-btn class="primary">Register</v-btn>
             <v-spacer></v-spacer>
             <!-- Add roles to show this button -->
-            <v-btn
-              class="success"
-              :to="{ name: 'EditCourse', params: { id: this.id } }"
-            >
-              Edit
-            </v-btn>
-            <v-btn
-              class="warninig"
-              flat
-              @click="onDeleteCourse"
-            >
-              Delete
-            </v-btn>
+            <template v-if="isOwner">
+              <v-btn
+                class="success"
+                :to="{ name: 'EditCourse', params: { id: this.id } }"
+              >
+                Edit
+              </v-btn>
+              <v-btn
+                class="warninig"
+                flat
+                @click="onDeleteCourse"
+              >
+                Delete
+              </v-btn>
+            </template>
 
           </v-card-actions>
         </v-card>
@@ -45,6 +57,9 @@ export default {
   computed: {
     course () {
       return this.$store.getters.loadedCourse(this.id)
+    },
+    isOwner () {
+      return this.$store.getters.isOwner(this.course.creatorId)
     }
   },
   methods: {

@@ -207,7 +207,7 @@ export const store = new Vuex.Store({
   getters: {
     loadedCourses (state) {
       return state.loadedCourses.sort((courseA, courseB) => {
-        return courseA.date > courseB.date
+        return courseA.date.start > courseB.date.start
       })
     },
     featuredCourses (state, getters) {
@@ -222,6 +222,14 @@ export const store = new Vuex.Store({
     },
     user (state) {
       return state.user
+    },
+    isOwner (state) {
+      return courseId => {
+        if (!state.user) {
+          return false
+        }
+        return state.user.id === courseId
+      }
     },
     loading (state) {
       return state.loading
