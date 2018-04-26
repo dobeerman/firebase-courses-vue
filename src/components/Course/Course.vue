@@ -14,7 +14,7 @@
       <v-flex xs8 offset-xs2>
         <v-card>
           <v-card-title>
-            <h6 class="primary--text">{{ course.title }}</h6>
+            <h2 class="primary--text">{{ course.title }}</h2>
           </v-card-title>
           <v-card-media
             :src="course.imageUrl"
