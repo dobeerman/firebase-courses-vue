@@ -109,13 +109,13 @@ export default {
     Object.assign(this.course, this.$store.getters.loadedCourse(this.id))
 
     Object.assign(this.date, {
-      start: new Date(this.course.date.start),
-      end: new Date(this.course.date.end)
+      start: this.$moment(this.course.date.start).format('YYYY-MM-DD'),
+      end: this.$moment(this.course.date.end).format('YYYY-MM-DD')
     })
 
     Object.assign(this.time, {
-      start: new Date(this.course.date.start),
-      end: new Date(this.course.date.end)
+      start: this.$moment(this.course.date.start).format('HH:mm'),
+      end: this.$moment(this.course.date.end).format('HH:mm')
     })
   },
   computed: {

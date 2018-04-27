@@ -107,14 +107,27 @@ export default {
       imageUrl: '',
       description: '',
       date: {
-        start: new Date(),
-        end: new Date()
+        start: '',
+        end: ''
       },
       time: {
-        start: new Date(),
-        end: new Date()
+        start: '',
+        end: ''
       }
     }
+  },
+  created () {
+    const momentDate = this.$moment().format('YYYY-MM-DD')
+    const momentTime = this.$moment().format('HH:mm')
+
+    Object.assign(this.date, {
+      start: momentDate,
+      end: momentDate
+    })
+    Object.assign(this.time, {
+      start: momentTime,
+      end: momentTime
+    })
   },
   computed: {
     formIsValid () {
