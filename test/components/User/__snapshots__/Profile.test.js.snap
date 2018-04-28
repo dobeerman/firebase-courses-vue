@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile.vue matches snapshot 1`] = `
+<div>
+  <p>The User Page</p>
+</div>
+`;
