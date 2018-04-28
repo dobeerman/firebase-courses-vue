@@ -188,8 +188,9 @@ export default {
 
       const isOverlapped = this.userCourses
         .reduce((pv, cv) => {
-          const cvStart = this.$moment(cv.date.start)
-          const cvEnd = this.$moment(cv.date.end)
+          // Deprecation warning: value provided is not in a recognized RFC2822 or ISO format.
+          const cvStart = this.$moment(new Date(cv.date.start).toISOString())
+          const cvEnd = this.$moment(new Date(cv.date.end).toISOString())
 
           const ok = start.isBetween(cvStart, cvEnd) || end.isBetween(cvStart, cvEnd)
 
